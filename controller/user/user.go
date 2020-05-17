@@ -39,5 +39,18 @@ func CreateUser(c *gin.Context) {
 
 // GetUser finds a specific user
 func GetUser(c *gin.Context) {
+	userID, validationErr := validate.GetUser(c)
+	if validationErr != nil {
+		restErr := customError.HandleError("bad request", validationErr.Error(), http.StatusBadRequest)
+		c.JSON(restErr.StatusCode, restErr)
+		return
+	}
 
+	result, err := userService.GetUser(userID)
+	if err != nil {
+		restErr := customError.HandleError("not found", err.Error(), http.StatusNotFound)
+		c.JSON(restErr.StatusCode, restErr)
+		return
+	}
+	c.JSON(http.StatusFound, result)
 }

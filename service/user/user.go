@@ -11,3 +11,12 @@ func CreateUser(u user.User) (*user.User, error) {
 	}
 	return &u, nil
 }
+
+// GetUser finds the result from the database
+func GetUser(userID uint64) (*user.User, error) {
+	result := &user.User{UserID: userID}
+	if err := result.GetUser(); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
